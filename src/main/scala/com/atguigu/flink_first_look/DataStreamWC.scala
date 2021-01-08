@@ -15,7 +15,6 @@ object DataStreamWC {
 
     val value: DataStream[(String, Int)] = dstream.flatMap(_.split(" ")).filter(_.nonEmpty).map((_,1)).keyBy(0).sum(1)
 
-
     value.print()
 
     env.execute()
