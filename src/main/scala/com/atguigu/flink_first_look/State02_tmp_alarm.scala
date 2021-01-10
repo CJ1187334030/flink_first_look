@@ -23,9 +23,25 @@ object State02_tmp_alarm {
       }
 
 
+    //flatmap实现
+//    val dsflatmap: DataStream[(String, Double, Double)] = ds.keyBy(_.num)
+//      .flatMap(new MyRichFlatMapFunction(10))
+
+
+    //flatmapwithstate实现  输入和返回 是 集合和当前的状态
     ds.keyBy(_.num)
-      .flatMap(new MyRichFlatMapFunction(10))
-      .print()
+        .flatMapWithState[(String,Double,Double),Double]({
+          case(date:SensorRead,None) => (List.empty,Some(date.tmp))
+          case(date:SensorRead,lastTemp:Some[Double]) =>{
+            val diff: Double = (date.tmp - lastTemp.get).abs
+            if (diff > 10)
+              (List((date.num,lastTemp.get,date.tmp)),Some(date.tmp))
+            else
+              (List.empty,Some(date.tmp))
+
+          }
+        })
+        .print()
 
     env.execute()
 
@@ -36,6 +52,7 @@ object State02_tmp_alarm {
   class MyRichFlatMapFunction(diff:Double) extends RichFlatMapFunction[SensorRead,(String,Double,Double)] {
 
     lazy private val valueState:ValueState[Double] = getRuntimeContext.getState[Double](new ValueStateDescriptor[Double]("valueState",classOf[Double]))
+
 
     override def flatMap(in: SensorRead, collector: Collector[(String, Double, Double)]) = {
 
