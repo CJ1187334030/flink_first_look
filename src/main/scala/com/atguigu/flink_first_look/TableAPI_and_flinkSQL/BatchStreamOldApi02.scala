@@ -83,17 +83,16 @@ object BatchStreamOldApi02 {
       */
 
 
-    val inputTable: Table = tableEnv.from("inputTable")
-
+    //flink sql  直接使用临时表
     val tableQuery: Table = tableEnv.sqlQuery("select * from inputTable where tmp <= 30")
 
+    //table API  拿到Table再使用，包括后面打印
+    val inputTable: Table = tableEnv.from("inputTable")
+    val tableSql: Table = inputTable.select("num,tmp")
+      .filter("tmp <= 30")
+
     //表的打印
-    tableQuery.toAppendStream[(String,Long,Double)].print("tableQuery")
-
-
-
-
-
+    tableQuery.toAppendStream[(String,Long,Double)].print("tableSql")
 
     env.execute()
 
