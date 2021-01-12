@@ -53,7 +53,7 @@ object BatchStreamOldApi02 {
 
 
     //文件读取数据
-    val filePath = "D:\\study\\IDEA\\flink_first_look\\src\\main\\resources\\sensor.txt"
+    val filePath = "F:\\study\\IDEA\\flink_first_look\\src\\main\\resources\\sensor.txt"
 
     tableEnv.connect(new FileSystem().path(filePath))
       .withFormat(new Csv())
@@ -91,7 +91,7 @@ object BatchStreamOldApi02 {
     val tableSql: Table = inputTable.select("num,tmp")
       .filter("tmp <= 30")
 
-    //表的打印
+    //表的打印   table => stream   只能是 append 和 retract  撤回模式
     tableQuery.toAppendStream[(String,Long,Double)].print("tableSql")
 
     env.execute()
