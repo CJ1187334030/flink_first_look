@@ -1,6 +1,5 @@
 package com.atguigu.flink_first_look.TableAPI_and_flinkSQL
 
-import org.apache.flink.api.scala.ExecutionEnvironment
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.table.api._
 import org.apache.flink.table.api.scala._
