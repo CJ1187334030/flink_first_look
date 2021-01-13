@@ -7,7 +7,6 @@ import com.atguigu.flink_first_look.utils.{MyESUtil, MyJdbcSink, MyKafkaUtil}
 import org.apache.flink.streaming.api.scala.{DataStream, StreamExecutionEnvironment}
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer011
 import org.apache.flink.api.scala._
-import org.apache.flink.streaming.connectors.elasticsearch6.ElasticsearchSink
 
 
 object DateStreamAPIEs {
